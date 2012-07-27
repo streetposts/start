@@ -1,0 +1,42 @@
+-----> stop_times
+#3.--> trip_id <--> trips.trip_id
+-------> departure_time
+-------> stop_id
+
+-----> calendar
+#1.-> service_id <--> calendar_dates.service_id 
+-------> monday
+-------> tuesday
+-------> wednesday
+-------> tursday
+-------> friday
+-------> saturday
+-------> sunday
+
+----->calendar_dates
+-------> service_id <--> calendar.service_id
+-------> date
+#2.--> exception_type  {1= service added, 2= service removed.}
+
+-----> trips
+-------> route_id 
+-------> trip_headsign
+-------> service_id <--> calendar_dates.service_id, calendar_service_id
+-------> trip_id <--> stop_times.trip_id
+
+INPUT:
+4 digit integer stop id 0000-9999
+OUTPUT:
+trips.route_id (int(4))
+trips.trip_headsign(varchar(20))
+stop_times.departure_tiime(varchar(6))
+
+-------------------------------------------------------------------------------------------------------------------
+###Revision 1.00 - Busses for next two hours - No Calendar check at all
+SELECT DISTINCT trips.route_id, trips.trip_headsign, stop_times.departure_time  FROM trips INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id WHERE departure_time > '06:15:00' AND departure_time <  '08:00:00' AND stop_id = '2839' ORDER BY departure_time;
+-------------------------------------------------------------------------------------------------------------------
+###Revision 1.10 - Busses for next two hours - No calendar_dates exceptions
+SELECT  DISTINCT trips.route_id, trips.trip_headsign, stop_times.departure_time  FROM trips INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id WHERE departure_time > '06:15:00' AND departure_time <  '08:00:00' AND stop_id = '2839' AND trips.trip_id IN (SELECT trips.trip_id FROM trips WHERE trips.service_id IN (SELECT  calendar.service_id FROM calendar WHERE wednesday = '1')) ORDER BY departure_time;
+-------------------------------------------------------------------------------------------------------------------
+###Revision 2.00 - NEXT 10 Bussed to a stop - No calendar_dates exceptions
+SELECT  DISTINCT trips.route_id, trips.trip_headsign, stop_times.departure_time  FROM trips INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id WHERE departure_time > '06:15:00'  AND stop_id = '2839' AND trips.trip_id IN (SELECT trips.trip_id FROM trips WHERE trips.service_id IN (SELECT  calendar.service_id FROM calendar WHERE wednesday = '1')) ORDER BY departure_time LIMIT 10;

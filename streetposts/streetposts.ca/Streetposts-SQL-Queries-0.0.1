@@ -1,0 +1,70 @@
+<-- DO NOT edit... This selects the next thirty buses at each stop.
+
+SELECT * FROM (SELECT *  FROM  (SELECT * FROM stop_times   WHERE stop_id = '3891') WHERE departure_time > '15:00:00' ORDER BY departure_time LIMIT 30) WHERE trip_id = (select trip_id from trips as t  where t.service_id IN (select c.service_id  from calendar as c where saturday ='1');
+
+SELECT *  FROM  (SELECT * FROM stop_times as s WHERE s.stop_id = '3891') WHERE departure_time > '15:00:00' ORDER BY departure_time LIMIT 30;
+
+
+<-- this one selects service_id's that are valid for the day replace saturday with variable $day where valid entries are monday-sunday.
+
+select service_id  from calendar where monday ='1'
+_____________________________________________________________________________________
+SELECT trips.route_id, trips.trip_headsign, stop_times.departure_time  FROM trips INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id WHERE departure_time > '15:00:00' ORDER BY departure_time;
+__________________________________________________________________
+
+<-- Get the trip_id's necessary these do not yet include the exceptions
+select t. trip_id from trips as t where service_id = (select todayService.service_id  from calendar as todayService where saturday ='1');
+
+select t.trip_id, t.route_id, t.service_id, t.trip_headsign from trips as t where service_id = (select c.service_id  from calendar as c where saturday ='1');
+These are the necessary tables to figure out what I want to know.
+        calendar.txt
+        routes.txt
+        stop_times.txt
+        trips.txt 
+
+Select * FROM(SELECT * FROM  (SELECT * FROM stop_times WHERE stop_id = '3891') WHERE departure_time > '15:00:00' ORDER BY departure_time LIMIT 30) WHERE service_id = a_merged_998605
+
+select * from trips as t where t.service_id = (select c.service_id  from calendar as c  where monday ='1');
+
+get valid trip id's for the day. use to select valid departure times.
+select * from trips as t  where t.service_id IN (select c.service_id  from calendar as c where saturday ='1')
+
+
+
+
+***** This one is Soooooooo close.
+SELECT * FROM (SELECT *  FROM  (SELECT * FROM stop_times   WHERE stop_id = '1000') WHERE departure_time > '15:00:00' ORDER BY departure_time LIMIT 50) WHERE trip_id IN (select trip_id from trips as t  where t.service_id IN (select c.service_id  from calendar as c where saturday ='1'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT * FROM (SELECT *  FROM  (SELECT * FROM stop_times   WHERE stop_id = '3891') WHERE departure_time > '15:00:00' ORDER BY departure_time LIMIT 30) where stop_id IN (select * from trips as t  where t.service_id IN (select c.service_id  from calendar as c where saturday ='1'));
+
+
+
+
+
+
+
+
+
+SELECT * FROM 
+
+
+################################################################
+SELECT trips.route_id, trips.trip_headsign, stop_times.departure_time  FROM trips INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id WHERE departure_time > '15:00:00' AND departure_time <  '17:00:00' AND stop_id = '1000' ORDER BY departure_time;
+##########################################
+;
