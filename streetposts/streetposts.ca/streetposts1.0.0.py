@@ -15,7 +15,7 @@ day = str.lower(time.strftime('%A'))
 print 'The day of the week is:', day
 time = time.strftime('%H:%M:%S')
 print 'The time now is:', time
-conn = sqlite.connect('/home/joseph/streetposts/grt.sqlite')
+conn = sqlite.connect('/home/joseph/streetposts/streetposts.ca/grt.sqlite')
 c = conn.cursor()
 c.execute("SELECT * FROM stops WHERE stop_id = '%s'" % stop)
 stopInfo = c.fetchone()
@@ -26,7 +26,9 @@ query = "SELECT DISTINCT trips.route_id, trips.trip_headsign, stop_times.departu
 c.execute(query)
 rows = c.fetchall()
 for row in rows: 
-  print row[0],row[1], row[2]
+   print row[0],row[1], row[2]
+conn.close
+
 
 
 
